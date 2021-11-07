@@ -9,34 +9,34 @@
 #Importing necessary modules
 
 #1. Importing data types from pyspark.sql.types
-from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType, DateType
 
 #2. Importing col function from pyspark.sql.functions to select specific columns
 from pyspark.sql.functions import col
 
 #3. Importing current_timestamp from pyspark.sql.functions to add a timestamp column
-from pyspark.sql.functions import current_timestamp
+from pyspark.sql.functions import current_timestamp, lit, to_timestamp, concat
 
 # COMMAND ----------
 
 #Defining the schema before file is read (similar to SQL), as opposed to inferring schema directly through the file
-circuits_schema = StructType(fields=[StructField("raceId", IntegerType(), False),
-                                     StructField("year", StringType(), True),
-                                     StructField("round", StringType(), True),
-                                     StructField("circuitId", StringType(), True),
+race_schema = StructType(fields=[StructField("raceId", IntegerType(), False),
+                                     StructField("year", IntegerType(), True),
+                                     StructField("round", IntegerType(), True),
+                                     StructField("circuitId", IntegerType(), True),
                                      StructField("name", StringType(), True),
-                                     StructField("date", DoubleType(), True),
-                                     StructField("time", DoubleType(), True),                     
+                                     StructField("date", StringType(), True),
+                                     StructField("time", StringType(), True),                     
                                      StructField("url", StringType(), True)
 ])
 
 # COMMAND ----------
 
 #Reading the file as per defined schema, using spark.read.csv, and using options() to define read parameters
-circuits_df = spark.read \
+races_df = spark.read \
 .option("header", True) \
-.schema(circuits_schema) \
-.csv("/mnt/wtf1dl/raw/circuits.csv")
+.schema(race_schema) \
+.csv("/mnt/wtf1dl/raw/races.csv")
 
 # COMMAND ----------
 
@@ -45,39 +45,32 @@ circuits_df = spark.read \
 
 # COMMAND ----------
 
-circuits_selected_df = circuits_df.select(col("circuitId"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt"))
+races_selected_df = races_df.select(col("raceId"), col("year"), col("round"), col("circuitId"), col("name"), col("date"), col("time"))
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##### Step 3 - Rename the columns as required
+# MAGIC ##### Step 3 - Rename the columns as required, add ingestion date, and create race_timestamp column
 
 # COMMAND ----------
 
-circuits_renamed_df = circuits_selected_df.withColumnRenamed("circuitId", "circuit_id") \
-.withColumnRenamed("circuitRef", "circuit_ref") \
-.withColumnRenamed("lat", "latitude") \
-.withColumnRenamed("lng", "longitude") \
-.withColumnRenamed("alt", "altitude") 
-
-# COMMAND ----------
-
-# MAGIC %md 
-# MAGIC ##### Step 4 - Add ingestion date to the dataframe
-
-# COMMAND ----------
-
-circuits_final_df = circuits_renamed_df.withColumn("ingestion_date", current_timestamp()) 
+#Adding a race timestamp column from date and time, and an ingestion date column for auditing
+races_final_df = races_selected_df.withColumnRenamed("raceId", "race_id") \
+.withColumnRenamed("year", "race_year") \
+.withColumnRenamed("circuitId", "circuit_id") \
+.withColumn("ingestion_date", current_timestamp()) \
+.withColumn("race_timestamp", to_timestamp(concat(col("date"), lit(" "), col("time")), "yyyy-MM-dd HH:mm:ss")) \
+.drop("date", "time")
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##### Step 5 - Write data to datalake as parquet
+# MAGIC ##### Step 4 - Write data to datalake as parquet
 
 # COMMAND ----------
 
-circuits_final_df.write.mode("overwrite").parquet("/mnt/wtf1dl/processed/circuits")
+races_final_df.write.mode("overwrite").parquet("/mnt/wtf1dl/processed/races")
 
 # COMMAND ----------
 
-display(spark.read.parquet("/mnt/wtf1dl/processed/circuits"))
+display(spark.read.parquet("/mnt/wtf1dl/processed/races"))
