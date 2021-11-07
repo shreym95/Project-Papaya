@@ -65,11 +65,11 @@ races_final_df = races_selected_df.withColumnRenamed("raceId", "race_id") \
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##### Step 4 - Write data to datalake as parquet
+# MAGIC ##### Step 4 - Write data to datalake as parquet with partition by year
 
 # COMMAND ----------
 
-races_final_df.write.mode("overwrite").parquet("/mnt/wtf1dl/processed/races")
+races_final_df.write.mode("overwrite").partitionBy("race_year").parquet("/mnt/wtf1dl/processed/races")
 
 # COMMAND ----------
 
