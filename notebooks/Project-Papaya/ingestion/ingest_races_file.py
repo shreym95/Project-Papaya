@@ -59,8 +59,12 @@ races_final_df = races_selected_df.withColumnRenamed("raceId", "race_id") \
 .withColumnRenamed("year", "race_year") \
 .withColumnRenamed("circuitId", "circuit_id") \
 .withColumn("ingestion_date", current_timestamp()) \
-.withColumn("race_timestamp", to_timestamp(concat(col("date"), lit(" "), col("time")), "yyyy-MM-dd HH:mm:ss")) \
-.drop("date", "time")
+.withColumn("race_timestamp", to_timestamp(concat(col("date"), lit(" "), col("time")), "yyyy-MM-dd HH:mm:ss"))
+
+# COMMAND ----------
+
+#Best practise to keep drop seperate and keep statements simple
+races_final_df.drop("date", "time")
 
 # COMMAND ----------
 
