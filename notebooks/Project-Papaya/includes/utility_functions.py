@@ -18,5 +18,5 @@ def add_ingestion_date(input_df):
 
 #Function to add datasource column
 def add_data_source(input_df, data_source):
-    output_df = input_df.withColumn()
+    output_df = input_df.withColumn("data_source", lit(data_source))
     return output_df
