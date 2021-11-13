@@ -6,6 +6,20 @@
 
 # COMMAND ----------
 
+#Adding widgets to pass data source at runtime
+dbutils.widgets.text("data_source", "")
+data_source = dbutils.widgets.get("data_source")
+
+# COMMAND ----------
+
+# MAGIC %run ../includes/configs
+
+# COMMAND ----------
+
+# MAGIC %run ../includes/utility_functions
+
+# COMMAND ----------
+
 #Importing necessary modules
 
 #1. Importing data types from pyspark.sql.types
@@ -37,7 +51,7 @@ circuits_schema = StructType(fields=[StructField("circuitId", IntegerType(), Fal
 circuits_df = spark.read \
 .option("header", True) \
 .schema(circuits_schema) \
-.csv("/mnt/wtf1dl/raw/circuits.csv")
+.csv(f"{raw_folder}/circuits.csv")
 
 # COMMAND ----------
 
@@ -68,7 +82,8 @@ circuits_renamed_df = circuits_selected_df.withColumnRenamed("circuitId", "circu
 
 # COMMAND ----------
 
-circuits_final_df = circuits_renamed_df.withColumn("ingestion_date", current_timestamp()) 
+circuits_df_temp = add_ingestion_date(circuits_renamed_df)#.withColumn("ingestion_date", current_timestamp()) 
+circuits_final_df = add_data_source(circuits_df_temp, data_source)
 
 # COMMAND ----------
 
@@ -77,8 +92,13 @@ circuits_final_df = circuits_renamed_df.withColumn("ingestion_date", current_tim
 
 # COMMAND ----------
 
-circuits_final_df.write.mode("overwrite").parquet("/mnt/wtf1dl/processed/circuits")
+circuits_final_df.write.mode("overwrite").parquet(f"{processed_folder}/circuits")
 
 # COMMAND ----------
 
 display(spark.read.parquet("/mnt/wtf1dl/processed/circuits"))
+
+# COMMAND ----------
+
+#Adding exit code for successful run of the notebook
+dbutils.notebook.exit("200")
