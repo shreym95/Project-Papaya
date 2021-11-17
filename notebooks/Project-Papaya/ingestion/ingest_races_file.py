@@ -73,8 +73,17 @@ races_final_df.drop("date", "time")
 
 # COMMAND ----------
 
-races_final_df.write.mode("overwrite").partitionBy("race_year").parquet("/mnt/wtf1dl/processed/races")
+races_final_df.write.mode("overwrite").partitionBy("race_year").format("parquet").saveAsTable("f1_processed.races")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT COUNT(*) FROM F1_PROCESSED.RACES WHERE RACE_YEAR = 2020
 
 # COMMAND ----------
 
 display(spark.read.parquet("/mnt/wtf1dl/processed/races"))
+
+# COMMAND ----------
+
+dbutils.notebook.exit("200")
