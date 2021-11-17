@@ -92,11 +92,16 @@ circuits_final_df = add_data_source(circuits_df_temp, data_source)
 
 # COMMAND ----------
 
-circuits_final_df.write.mode("overwrite").parquet(f"{processed_folder}/circuits")
+circuits_final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.circuits")
 
 # COMMAND ----------
 
 display(spark.read.parquet("/mnt/wtf1dl/processed/circuits"))
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT COUNT(*) FROM f1_processed.circuits;
 
 # COMMAND ----------
 
