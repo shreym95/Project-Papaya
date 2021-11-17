@@ -51,8 +51,17 @@ final_df = lap_times_df.withColumnRenamed("driverId", "driver_id") \
 
 # COMMAND ----------
 
-final_df.write.mode("overwrite").parquet("/mnt/wtf1dl/processed/lap_times")
+final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.lap_times")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT COUNT(*) FROM F1_PROCESSED.LAP_TIMES
 
 # COMMAND ----------
 
 display(spark.read.parquet("/mnt/wtf1dl/processed/lap_times"))
+
+# COMMAND ----------
+
+dbutils.notebook.exit("200")
