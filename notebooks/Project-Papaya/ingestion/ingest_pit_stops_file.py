@@ -53,8 +53,22 @@ final_df = pit_stops_df.withColumnRenamed("driverId", "driver_id") \
 
 # COMMAND ----------
 
-final_df.write.mode("overwrite").parquet("/mnt/wtf1dl/processed/pit_stops")
+final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.pit_stops")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT COUNT(*) FROM F1_PROCESSED.PIT_STOPS
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC DESC EXTENDED F1_PROCESSED.PIT_STOPS
 
 # COMMAND ----------
 
 display(spark.read.parquet("/mnt/wtf1dl/processed/pit_stops"))
+
+# COMMAND ----------
+
+dbutils.notebook.exit("200")
