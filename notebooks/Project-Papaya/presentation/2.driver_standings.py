@@ -37,4 +37,9 @@ display(final_df.filter("race_year = 2020"))
 
 # COMMAND ----------
 
-final_df.write.mode("overwrite").parquet(f"{presentation_folder}/driver_standings")
+final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_presentation.driver_standings")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT COUNT(*) FROM F1_PRESENTATION.DRIVER_STANDINGS
