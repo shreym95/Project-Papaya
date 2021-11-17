@@ -68,8 +68,17 @@ constructor_final_df = constructor_dropped_df.withColumnRenamed("constructorId",
 
 # COMMAND ----------
 
-constructor_final_df.write.mode("overwrite").parquet("/mnt/wtf1dl/processed/constructors")
+constructor_final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.constructors")
 
 # COMMAND ----------
 
 display(spark.read.parquet("/mnt/wtf1dl/processed/constructors"))
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT COUNT(*) FROM f1_processed.constructors
+
+# COMMAND ----------
+
+dbutils.notebook.exit("200")
