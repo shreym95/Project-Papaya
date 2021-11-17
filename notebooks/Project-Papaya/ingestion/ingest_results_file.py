@@ -80,8 +80,17 @@ results_final_df = results_with_columns_df.drop(col("statusId"))
 
 # COMMAND ----------
 
-results_final_df.write.mode("overwrite").partitionBy('race_id').parquet("/mnt/wtf1dl/processed/results")
+results_final_df.write.mode("overwrite").partitionBy('race_id').format("parquet").saveAsTable("f1_processed.results")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT COUNT(*) FROM F1_PROCESSED.RESULTS WHERE RACE_ID > 100
 
 # COMMAND ----------
 
 display(spark.read.parquet("/mnt/wtf1dl/processed/results"))
+
+# COMMAND ----------
+
+dbutils.notebook.exit("200")
