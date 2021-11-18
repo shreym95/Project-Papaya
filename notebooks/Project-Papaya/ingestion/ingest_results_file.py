@@ -4,6 +4,22 @@
 
 # COMMAND ----------
 
+#Adding widgets to pass data source at runtime
+dbutils.widgets.text("file_date", "")
+file_date = dbutils.widgets.get("file_date")
+dbutils.widgets.text("data_source", "")
+data_source = dbutils.widgets.get("data_source")
+
+# COMMAND ----------
+
+# MAGIC %run ../includes/configs
+
+# COMMAND ----------
+
+# MAGIC %run ../includes/common_functions
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### Step 1 - Read the JSON file using the spark dataframe reader API
 
@@ -36,7 +52,7 @@ results_schema = StructType(fields=[StructField("resultId", IntegerType(), False
 
 results_df = spark.read \
 .schema(results_schema) \
-.json("/mnt/wtf1dl/raw/results.json")
+.json(f"{raw_folder}/{file_date}/results.json")
 
 # COMMAND ----------
 
@@ -45,7 +61,7 @@ results_df = spark.read \
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp
+from pyspark.sql.functions import current_timestamp, lit
 
 # COMMAND ----------
 
@@ -58,7 +74,9 @@ results_with_columns_df = results_df.withColumnRenamed("resultId", "result_id") 
                                     .withColumnRenamed("fastestLap", "fastest_lap") \
                                     .withColumnRenamed("fastestLapTime", "fastest_lap_time") \
                                     .withColumnRenamed("fastestLapSpeed", "fastest_lap_speed") \
-                                    .withColumn("ingestion_date", current_timestamp()) 
+                                    .withColumn("ingestion_date", current_timestamp()) \
+                                    .withColumn("data_source", lit(data_source)) \
+                                    .withColumn("file_date", lit(file_date))
 
 # COMMAND ----------
 
@@ -76,11 +94,11 @@ results_final_df = results_with_columns_df.drop(col("statusId"))
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##### Step 4 - Write to output to processed container in parquet format
+# MAGIC ##### Step 4 - Write to output to processed container in parquet format by incremental load
 
 # COMMAND ----------
 
-results_final_df.write.mode("overwrite").partitionBy('race_id').format("parquet").saveAsTable("f1_processed.results")
+overwrite_partition(results_final_df, 'f1_processed', 'results', 'race_id')
 
 # COMMAND ----------
 
@@ -89,7 +107,7 @@ results_final_df.write.mode("overwrite").partitionBy('race_id').format("parquet"
 
 # COMMAND ----------
 
-display(spark.read.parquet("/mnt/wtf1dl/processed/results"))
+display(spark.read.parquet(f"{processed_folder}/results"))
 
 # COMMAND ----------
 
