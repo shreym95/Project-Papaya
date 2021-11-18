@@ -4,6 +4,22 @@
 
 # COMMAND ----------
 
+#Adding widgets to pass data source at runtime
+dbutils.widgets.text("file_date", "")
+file_date = dbutils.widgets.get("file_date")
+dbutils.widgets.text("data_source", "")
+data_source = dbutils.widgets.get("data_source")
+
+# COMMAND ----------
+
+# MAGIC %run ../includes/configs
+
+# COMMAND ----------
+
+# MAGIC %run ../includes/common_functions
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### Step 1 - Read the JSON file using the spark dataframe reader API
 
@@ -27,7 +43,7 @@ pit_stops_schema = StructType(fields=[StructField("raceId", IntegerType(), False
 pit_stops_df = spark.read \
 .schema(pit_stops_schema) \
 .option("multiLine", True) \
-.json("/mnt/wtf1dl/raw/pit_stops.json")
+.json(f"{raw_folder}/{file_date}/pit_stops.json")
 
 # COMMAND ----------
 
@@ -38,13 +54,15 @@ pit_stops_df = spark.read \
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp
+from pyspark.sql.functions import current_timestamp, lit
 
 # COMMAND ----------
 
-final_df = pit_stops_df.withColumnRenamed("driverId", "driver_id") \
+pit_stops_final_df = pit_stops_df.withColumnRenamed("driverId", "driver_id") \
 .withColumnRenamed("raceId", "race_id") \
-.withColumn("ingestion_date", current_timestamp())
+.withColumn("ingestion_date", current_timestamp()) \
+.withColumn("data_source", lit(data_source)) \
+.withColumn("file_date", lit(file_date))
 
 # COMMAND ----------
 
@@ -53,7 +71,7 @@ final_df = pit_stops_df.withColumnRenamed("driverId", "driver_id") \
 
 # COMMAND ----------
 
-final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.pit_stops")
+overwrite_partition(pit_stops_final_df, 'f1_processed', 'pit_stops', 'race_id')
 
 # COMMAND ----------
 
