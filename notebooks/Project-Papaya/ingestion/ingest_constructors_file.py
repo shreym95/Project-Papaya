@@ -4,6 +4,18 @@
 
 # COMMAND ----------
 
+# MAGIC %run ../includes/configs
+
+# COMMAND ----------
+
+#Adding widgets to pass data source at runtime
+dbutils.widgets.text("file_date", "")
+file_date = dbutils.widgets.get("file_date")
+dbutils.widgets.text("data_source", "")
+data_source = dbutils.widgets.get("data_source")
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### Step 1 - Read the JSON file using the spark dataframe reader
 
@@ -27,7 +39,7 @@ constructors_schema = StructType([StructField("constructorId", IntegerType(), Fa
 
 constructor_df = spark.read \
 .schema(constructors_schema) \
-.json("/mnt/wtf1dl/raw/constructors.json")
+.json(f"{raw_folder}/{file_date}/constructors.json")
 
 # COMMAND ----------
 
@@ -53,13 +65,15 @@ constructor_dropped_df = constructor_df.drop(col('url'))
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp
+from pyspark.sql.functions import current_timestamp, lit
 
 # COMMAND ----------
 
 constructor_final_df = constructor_dropped_df.withColumnRenamed("constructorId", "constructor_id") \
                                              .withColumnRenamed("constructorRef", "constructor_ref") \
-                                             .withColumn("ingestion_date", current_timestamp())
+                                             .withColumn("ingestion_date", current_timestamp()) \
+                                             .withColumn("data_source", lit(data_source)) \
+                                             .withColumn("file_date", lit(file_date))
 
 # COMMAND ----------
 
