@@ -4,6 +4,22 @@
 
 # COMMAND ----------
 
+#Adding widgets to pass data source at runtime
+dbutils.widgets.text("file_date", "")
+file_date = dbutils.widgets.get("file_date")
+dbutils.widgets.text("data_source", "")
+data_source = dbutils.widgets.get("data_source")
+
+# COMMAND ----------
+
+# MAGIC %run ../includes/configs
+
+# COMMAND ----------
+
+# MAGIC %run ../includes/common_functions
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### Step 1 - Read the CSV file using the spark dataframe reader API
 
@@ -25,7 +41,7 @@ lap_times_schema = StructType(fields=[StructField("raceId", IntegerType(), False
 
 lap_times_df = spark.read \
 .schema(lap_times_schema) \
-.csv("/mnt/wtf1dl/raw/lap_times")
+.csv(f"{raw_folder}/{file_date}/lap_times")
 
 # COMMAND ----------
 
@@ -36,13 +52,15 @@ lap_times_df = spark.read \
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp
+from pyspark.sql.functions import current_timestamp, lit
 
 # COMMAND ----------
 
-final_df = lap_times_df.withColumnRenamed("driverId", "driver_id") \
+lap_times_final_df = lap_times_df.withColumnRenamed("driverId", "driver_id") \
 .withColumnRenamed("raceId", "race_id") \
-.withColumn("ingestion_date", current_timestamp())
+.withColumn("ingestion_date", current_timestamp()) \
+.withColumn("data_source", lit(data_source)) \
+.withColumn("file_date", lit(file_date))
 
 # COMMAND ----------
 
@@ -51,7 +69,7 @@ final_df = lap_times_df.withColumnRenamed("driverId", "driver_id") \
 
 # COMMAND ----------
 
-final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.lap_times")
+overwrite_partition(lap_times_final_df, 'f1_processed', 'lap_times', 'race_id')
 
 # COMMAND ----------
 
@@ -60,7 +78,7 @@ final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.lap
 
 # COMMAND ----------
 
-display(spark.read.parquet("/mnt/wtf1dl/processed/lap_times"))
+display(spark.read.parquet(f"{processed_folder}/lap_times"))
 
 # COMMAND ----------
 
