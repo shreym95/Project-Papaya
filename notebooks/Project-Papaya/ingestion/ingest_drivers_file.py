@@ -9,6 +9,18 @@
 
 # COMMAND ----------
 
+# MAGIC %run ../includes/configs
+
+# COMMAND ----------
+
+#Adding widgets to pass data source at runtime
+dbutils.widgets.text("file_date", "")
+file_date = dbutils.widgets.get("file_date")
+dbutils.widgets.text("data_source", "")
+data_source = dbutils.widgets.get("data_source")
+
+# COMMAND ----------
+
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DateType
 
 # COMMAND ----------
@@ -33,7 +45,7 @@ drivers_schema = StructType(fields=[StructField("driverId", IntegerType(), False
 
 drivers_df = spark.read \
 .schema(drivers_schema) \
-.json("/mnt/wtf1dl/raw/drivers.json")
+.json(f"{raw_folder}/{file_date}/drivers.json")
 
 # COMMAND ----------
 
@@ -54,7 +66,9 @@ from pyspark.sql.functions import col, concat, current_timestamp, lit
 drivers_with_columns_df = drivers_df.withColumnRenamed("driverId", "driver_id") \
                                     .withColumnRenamed("driverRef", "driver_ref") \
                                     .withColumn("ingestion_date", current_timestamp()) \
-                                    .withColumn("name", concat(col("name.forename"), lit(" "), col("name.surname")))
+                                    .withColumn("name", concat(col("name.forename"), lit(" "), col("name.surname"))) \
+                                    .withColumn("data_source", lit(data_source)) \
+                                    .withColumn("file_date", lit(file_date))
 
 # COMMAND ----------
 
@@ -76,7 +90,7 @@ drivers_final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_proce
 
 # COMMAND ----------
 
-display(spark.read.parquet("/mnt/wtf1dl/processed/drivers"))
+display(spark.read.parquet(f"{processed_folder}/drivers"))
 
 # COMMAND ----------
 
