@@ -6,6 +6,18 @@
 
 # COMMAND ----------
 
+# MAGIC %run ../includes/configs
+
+# COMMAND ----------
+
+#Adding widgets to pass data source at runtime
+dbutils.widgets.text("file_date", "")
+file_date = dbutils.widgets.get("file_date")
+dbutils.widgets.text("data_source", "")
+data_source = dbutils.widgets.get("data_source")
+
+# COMMAND ----------
+
 #Importing necessary modules
 
 #1. Importing data types from pyspark.sql.types
@@ -36,7 +48,7 @@ race_schema = StructType(fields=[StructField("raceId", IntegerType(), False),
 races_df = spark.read \
 .option("header", True) \
 .schema(race_schema) \
-.csv("/mnt/wtf1dl/raw/races.csv")
+.csv(f"{raw_folder}/{file_date}/races.csv")
 
 # COMMAND ----------
 
@@ -59,7 +71,9 @@ races_final_df = races_selected_df.withColumnRenamed("raceId", "race_id") \
 .withColumnRenamed("year", "race_year") \
 .withColumnRenamed("circuitId", "circuit_id") \
 .withColumn("ingestion_date", current_timestamp()) \
-.withColumn("race_timestamp", to_timestamp(concat(col("date"), lit(" "), col("time")), "yyyy-MM-dd HH:mm:ss"))
+.withColumn("race_timestamp", to_timestamp(concat(col("date"), lit(" "), col("time")), "yyyy-MM-dd HH:mm:ss")) \
+.withColumn("data_source", lit(data_source)) \
+.withColumn("file_date", lit(file_date))
 
 # COMMAND ----------
 
