@@ -18,7 +18,7 @@
 					"notebookPath": "/Project-Papaya/ingestion/1. ingest_circuits_file",
 					"baseParameters": {
 						"file_date": {
-							"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-mm-dd')",
+							"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
 							"type": "Expression"
 						},
 						"data_source": {
