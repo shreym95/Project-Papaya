@@ -1,0 +1,13 @@
+{
+	"name": "Formula1Databricks",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-3131713074384682.2.azuredatabricks.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/a083ce97-bd37-41b7-9cb5-eac15fbce79e/resourceGroups/spark-test/providers/Microsoft.Databricks/workspaces/Formula1Analytics",
+			"existingClusterId": "1106-082227-hl3dalgx"
+		}
+	}
+}
