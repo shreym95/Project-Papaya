@@ -1,0 +1,26 @@
+{
+	"name": "Formula1_Dataset_raw",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Formula1_DataLake",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"window_end_date_dataset": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@dataset().window_end_date_dataset",
+					"type": "Expression"
+				},
+				"fileSystem": "raw"
+			}
+		}
+	}
+}
