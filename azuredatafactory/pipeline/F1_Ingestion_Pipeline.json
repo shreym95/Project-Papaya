@@ -3,246 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Ingest Circuits File",
-				"type": "DatabricksNotebook",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"notebookPath": "/Project-Papaya/ingestion/1. ingest_circuits_file",
-					"baseParameters": {
-						"file_date": {
-							"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
-							"type": "Expression"
-						},
-						"data_source": {
-							"value": "@variables('data_source_global')",
-							"type": "Expression"
-						}
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "Formula1Databricks",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
-				"name": "Ingest Races File",
-				"type": "DatabricksNotebook",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"notebookPath": "/Project-Papaya/ingestion/2. ingest_races_file",
-					"baseParameters": {
-						"file_date": {
-							"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
-							"type": "Expression"
-						},
-						"data_source": {
-							"value": "@variables('data_source_global')",
-							"type": "Expression"
-						}
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "Formula1Databricks",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
-				"name": "Ingest Constructors File",
-				"type": "DatabricksNotebook",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"notebookPath": "/Project-Papaya/ingestion/3. ingest_constructors_file",
-					"baseParameters": {
-						"file_date": {
-							"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
-							"type": "Expression"
-						},
-						"data_source": {
-							"value": "@variables('data_source_global')",
-							"type": "Expression"
-						}
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "Formula1Databricks",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
-				"name": "Ingest Drivers File",
-				"type": "DatabricksNotebook",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"notebookPath": "/Project-Papaya/ingestion/4. ingest_drivers_file",
-					"baseParameters": {
-						"file_date": {
-							"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
-							"type": "Expression"
-						},
-						"data_source": {
-							"value": "@variables('data_source_global')",
-							"type": "Expression"
-						}
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "Formula1Databricks",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
-				"name": "Ingest Results File",
-				"type": "DatabricksNotebook",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"notebookPath": "/Project-Papaya/ingestion/5. ingest_results_file",
-					"baseParameters": {
-						"file_date": {
-							"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
-							"type": "Expression"
-						},
-						"data_source": {
-							"value": "@variables('data_source_global')",
-							"type": "Expression"
-						}
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "Formula1Databricks",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
-				"name": "Ingest Pit Stops File",
-				"type": "DatabricksNotebook",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"notebookPath": "/Project-Papaya/ingestion/6. ingest_pit_stops_file",
-					"baseParameters": {
-						"file_date": {
-							"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
-							"type": "Expression"
-						},
-						"data_source": {
-							"value": "@variables('data_source_global')",
-							"type": "Expression"
-						}
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "Formula1Databricks",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
-				"name": "Ingest Lap Times File",
-				"type": "DatabricksNotebook",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"notebookPath": "/Project-Papaya/ingestion/7. ingest_lap_times_file",
-					"baseParameters": {
-						"file_date": {
-							"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
-							"type": "Expression"
-						},
-						"data_source": {
-							"value": "@variables('data_source_global')",
-							"type": "Expression"
-						}
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "Formula1Databricks",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
-				"name": "Ingest Qualifying File",
-				"type": "DatabricksNotebook",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"notebookPath": "/Project-Papaya/ingestion/8. ingest_qualifying_file",
-					"baseParameters": {
-						"file_date": {
-							"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
-							"type": "Expression"
-						},
-						"data_source": {
-							"value": "@variables('data_source_global')",
-							"type": "Expression"
-						}
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "Formula1Databricks",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
 				"name": "Get Metadata1",
 				"type": "GetMetadata",
 				"dependsOn": [],
@@ -275,6 +35,267 @@
 					"formatSettings": {
 						"type": "BinaryReadSettings"
 					}
+				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@activity('Get Metadata1').output",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Ingest Circuits File",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Project-Papaya/ingestion/1. ingest_circuits_file",
+								"baseParameters": {
+									"file_date": {
+										"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
+										"type": "Expression"
+									},
+									"data_source": {
+										"value": "@variables('data_source_global')",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "Formula1Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Ingest Races File",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Project-Papaya/ingestion/2. ingest_races_file",
+								"baseParameters": {
+									"file_date": {
+										"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
+										"type": "Expression"
+									},
+									"data_source": {
+										"value": "@variables('data_source_global')",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "Formula1Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Ingest Constructors File",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Project-Papaya/ingestion/3. ingest_constructors_file",
+								"baseParameters": {
+									"file_date": {
+										"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
+										"type": "Expression"
+									},
+									"data_source": {
+										"value": "@variables('data_source_global')",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "Formula1Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Ingest Drivers File",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Project-Papaya/ingestion/4. ingest_drivers_file",
+								"baseParameters": {
+									"file_date": {
+										"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
+										"type": "Expression"
+									},
+									"data_source": {
+										"value": "@variables('data_source_global')",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "Formula1Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Ingest Results File",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Project-Papaya/ingestion/5. ingest_results_file",
+								"baseParameters": {
+									"file_date": {
+										"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
+										"type": "Expression"
+									},
+									"data_source": {
+										"value": "@variables('data_source_global')",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "Formula1Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Ingest Pit Stops File",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Project-Papaya/ingestion/6. ingest_pit_stops_file",
+								"baseParameters": {
+									"file_date": {
+										"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
+										"type": "Expression"
+									},
+									"data_source": {
+										"value": "@variables('data_source_global')",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "Formula1Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Ingest Lap Times File",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Project-Papaya/ingestion/7. ingest_lap_times_file",
+								"baseParameters": {
+									"file_date": {
+										"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
+										"type": "Expression"
+									},
+									"data_source": {
+										"value": "@variables('data_source_global')",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "Formula1Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Ingest Qualifying File",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Project-Papaya/ingestion/8. ingest_qualifying_file",
+								"baseParameters": {
+									"file_date": {
+										"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
+										"type": "Expression"
+									},
+									"data_source": {
+										"value": "@variables('data_source_global')",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "Formula1Databricks",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
 				}
 			}
 		],
