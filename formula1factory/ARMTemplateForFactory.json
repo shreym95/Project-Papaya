@@ -1,0 +1,120 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "formula1factory"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/F1_Ingestion_Pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Ingest Circuits File",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Project-Papaya/ingestion/1. ingest_circuits_file",
+							"baseParameters": {
+								"file_date": {
+									"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
+									"type": "Expression"
+								},
+								"data_source": {
+									"value": "@variables('data_source_global')",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "Formula1Databricks",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Ingest Circuits File_copy1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Project-Papaya/ingestion/1. ingest_circuits_file",
+							"baseParameters": {
+								"file_date": {
+									"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-MM-dd')",
+									"type": "Expression"
+								},
+								"data_source": {
+									"value": "@variables('data_source_global')",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "Formula1Databricks",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"window_end_date": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"data_source_global": {
+						"type": "String",
+						"defaultValue": "Ergast API"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Formula1Databricks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Formula1Databricks')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-3131713074384682.2.azuredatabricks.net",
+					"authentication": "MSI",
+					"workspaceResourceId": "/subscriptions/a083ce97-bd37-41b7-9cb5-eac15fbce79e/resourceGroups/spark-test/providers/Microsoft.Databricks/workspaces/Formula1Analytics",
+					"existingClusterId": "1106-082227-hl3dalgx"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
