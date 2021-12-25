@@ -1,0 +1,10 @@
+{
+	"name": "Formula1_DataLake",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://wtf1dl.dfs.core.windows.net"
+		}
+	}
+}
