@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "formula1factory"
 		},
+		"Formula1_DataLake_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://wtf1dl.dfs.core.windows.net"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -33,6 +37,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"Formula1_DataLake_properties_typeProperties_url": {
+						"value": "[parameters('Formula1_DataLake_properties_typeProperties_url')]"
 					}
 				}
 			},

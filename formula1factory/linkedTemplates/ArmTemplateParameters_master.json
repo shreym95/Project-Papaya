@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "formula1factory"
 		},
+		"Formula1_DataLake_properties_typeProperties_url": {
+			"value": "https://wtf1dl.dfs.core.windows.net"
+		},
 		"containerUri": {
 			"value": ""
 		},

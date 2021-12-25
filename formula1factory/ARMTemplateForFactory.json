@@ -6,6 +6,10 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "formula1factory"
+		},
+		"Formula1_DataLake_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://wtf1dl.dfs.core.windows.net"
 		}
 	},
 	"variables": {
@@ -292,6 +296,19 @@
 					"authentication": "MSI",
 					"workspaceResourceId": "/subscriptions/a083ce97-bd37-41b7-9cb5-eac15fbce79e/resourceGroups/spark-test/providers/Microsoft.Databricks/workspaces/Formula1Analytics",
 					"existingClusterId": "1106-082227-hl3dalgx"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Formula1_DataLake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('Formula1_DataLake_properties_typeProperties_url')]"
 				}
 			},
 			"dependsOn": []
