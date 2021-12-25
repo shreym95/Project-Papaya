@@ -1,0 +1,49 @@
+{
+	"name": "F1_Ingestion_Pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Ingest Circuits File",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Project-Papaya/ingestion/1. ingest_circuits_file",
+					"baseParameters": {
+						"file_date": {
+							"value": "@formatDateTime(pipeline().parameters.window_end_date, 'yyyy-mm-dd')",
+							"type": "Expression"
+						},
+						"data_source": {
+							"value": "@variables('data_source_global')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "Formula1Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"window_end_date": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"data_source_global": {
+				"type": "String",
+				"defaultValue": "Ergast API"
+			}
+		},
+		"annotations": []
+	}
+}
