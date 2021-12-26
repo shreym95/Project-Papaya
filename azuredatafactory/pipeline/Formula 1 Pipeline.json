@@ -12,7 +12,13 @@
 						"referenceName": "F1_Ingestion_Pipeline",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"window_end_date": {
+							"value": "@pipeline().parameters.window_end_date_global",
+							"type": "Expression"
+						}
+					}
 				}
 			},
 			{
@@ -32,12 +38,18 @@
 						"referenceName": "F1_Transformation_Pipeline",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"window_end_date": {
+							"value": "@pipeline().parameters.window_end_date_global",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
 		"parameters": {
-			"window_end_date": {
+			"window_end_date_global": {
 				"type": "string"
 			}
 		},
