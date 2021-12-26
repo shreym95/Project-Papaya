@@ -2,7 +2,16 @@
 	"name": "Formula1 trigger2",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
+		"pipeline": {
+			"pipelineReference": {
+				"referenceName": "Formula 1 Pipeline",
+				"type": "PipelineReference"
+			},
+			"parameters": {
+				"window_end_date_global": "@trigger().outputs.windowEndTime"
+			}
+		},
 		"type": "TumblingWindowTrigger",
 		"typeProperties": {
 			"frequency": "Hour",
