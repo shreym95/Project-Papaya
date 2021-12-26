@@ -2,7 +2,7 @@
 	"name": "Formula1 Trigger",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipeline": {
 			"pipelineReference": {
 				"referenceName": "Formula 1 Pipeline",
