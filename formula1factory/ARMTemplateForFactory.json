@@ -324,6 +324,7 @@
 						}
 					}
 				],
+				"concurrency": 1,
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
@@ -551,30 +552,11 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Execute Pipeline1 for Ingestion",
-						"type": "ExecutePipeline",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "F1_Ingestion_Pipeline",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"window_end_date": {
-									"value": "@pipeline().parameters.window_end_date_global",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
 						"name": "Execute Pipeline2 for Transformations",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
-								"activity": "Execute Pipeline1 for Ingestion",
+								"activity": "Execute Pipeline1",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -594,8 +576,28 @@
 								}
 							}
 						}
+					},
+					{
+						"name": "Execute Pipeline1",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "F1_Ingestion_Pipeline",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"window_end_date": {
+									"value": "@pipeline().parameters.window_end_date_global",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
+				"concurrency": 1,
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
@@ -608,8 +610,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/F1_Ingestion_Pipeline')]",
-				"[concat(variables('factoryId'), '/pipelines/F1_Transformation_Pipeline')]"
+				"[concat(variables('factoryId'), '/pipelines/F1_Transformation_Pipeline')]",
+				"[concat(variables('factoryId'), '/pipelines/F1_Ingestion_Pipeline')]"
 			]
 		},
 		{
