@@ -11,6 +11,10 @@
 			"type": "string",
 			"defaultValue": "https://wtf1dl.dfs.core.windows.net"
 		},
+		"Formula1 Trigger_properties_pipeline_parameters_window_end_date_global": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -40,6 +44,9 @@
 					},
 					"Formula1_DataLake_properties_typeProperties_url": {
 						"value": "[parameters('Formula1_DataLake_properties_typeProperties_url')]"
+					},
+					"Formula1 Trigger_properties_pipeline_parameters_window_end_date_global": {
+						"value": "[parameters('Formula1 Trigger_properties_pipeline_parameters_window_end_date_global')]"
 					}
 				}
 			},

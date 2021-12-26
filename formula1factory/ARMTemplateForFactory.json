@@ -10,6 +10,10 @@
 		"Formula1_DataLake_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://wtf1dl.dfs.core.windows.net"
+		},
+		"Formula1 Trigger_properties_pipeline_parameters_window_end_date_global": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
 		}
 	},
 	"variables": {
@@ -541,6 +545,74 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Formula 1 Pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Execute Pipeline1 for Ingestion",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "F1_Ingestion_Pipeline",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"window_end_date": {
+									"value": "@pipeline().parameters.window_end_date_global",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "Execute Pipeline2 for Transformations",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Execute Pipeline1 for Ingestion",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "F1_Transformation_Pipeline",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"window_end_date": {
+									"value": "@pipeline().parameters.window_end_date_global",
+									"type": "Expression"
+								}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"window_end_date_global": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/F1_Ingestion_Pipeline')]",
+				"[concat(variables('factoryId'), '/pipelines/F1_Transformation_Pipeline')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Formula1_Dataset_raw')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -599,6 +671,40 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Formula1 Trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "Formula 1 Pipeline",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"window_end_date_global": "[parameters('Formula1 Trigger_properties_pipeline_parameters_window_end_date_global')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 168,
+					"startTime": "2021-03-11T22:00:00Z",
+					"endTime": "2021-04-25T22:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 1,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Formula 1 Pipeline')]"
+			]
 		}
 	]
 }
