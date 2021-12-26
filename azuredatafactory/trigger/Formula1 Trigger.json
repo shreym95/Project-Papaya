@@ -7,6 +7,9 @@
 			"pipelineReference": {
 				"referenceName": "Formula 1 Pipeline",
 				"type": "PipelineReference"
+			},
+			"parameters": {
+				"window_end_date": "@trigger().outputs.windowEndTime"
 			}
 		},
 		"type": "TumblingWindowTrigger",

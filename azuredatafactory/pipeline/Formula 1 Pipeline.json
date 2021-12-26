@@ -36,6 +36,11 @@
 				}
 			}
 		],
+		"parameters": {
+			"window_end_date": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
