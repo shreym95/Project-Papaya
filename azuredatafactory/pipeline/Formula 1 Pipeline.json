@@ -3,13 +3,20 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Execute Pipeline1 for Ingestion",
+				"name": "Execute Pipeline2 for Transformations",
 				"type": "ExecutePipeline",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Execute Pipeline1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "F1_Ingestion_Pipeline",
+						"referenceName": "F1_Transformation_Pipeline",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,
@@ -22,20 +29,13 @@
 				}
 			},
 			{
-				"name": "Execute Pipeline2 for Transformations",
+				"name": "Execute Pipeline1",
 				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "Execute Pipeline1 for Ingestion",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "F1_Transformation_Pipeline",
+						"referenceName": "F1_Ingestion_Pipeline",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,

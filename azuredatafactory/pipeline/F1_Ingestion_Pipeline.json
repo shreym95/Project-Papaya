@@ -30,6 +30,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -299,6 +300,7 @@
 				}
 			}
 		],
+		"concurrency": 1,
 		"parameters": {
 			"window_end_date": {
 				"type": "string"
