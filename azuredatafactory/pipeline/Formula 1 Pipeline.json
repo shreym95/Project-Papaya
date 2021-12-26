@@ -48,6 +48,7 @@
 				}
 			}
 		],
+		"concurrency": 1,
 		"parameters": {
 			"window_end_date_global": {
 				"type": "string"
