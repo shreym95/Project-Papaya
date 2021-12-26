@@ -11,7 +11,7 @@
 			"type": "string",
 			"defaultValue": "https://wtf1dl.dfs.core.windows.net"
 		},
-		"Formula1 Trigger_properties_pipeline_parameters_window_end_date_global": {
+		"Formula1 trigger2_properties_pipeline_parameters_window_end_date_global": {
 			"type": "string",
 			"defaultValue": "@trigger().outputs.windowEndTime"
 		}
@@ -680,6 +680,29 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
+				"runtimeState": "Stopped",
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 168,
+					"startTime": "2021-03-11T22:00:00Z",
+					"endTime": "2021-04-25T22:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 1,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Formula1 trigger2')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
 				"runtimeState": "Started",
 				"pipeline": {
 					"pipelineReference": {
@@ -687,15 +710,15 @@
 						"type": "PipelineReference"
 					},
 					"parameters": {
-						"window_end_date_global": "[parameters('Formula1 Trigger_properties_pipeline_parameters_window_end_date_global')]"
+						"window_end_date_global": "[parameters('Formula1 trigger2_properties_pipeline_parameters_window_end_date_global')]"
 					}
 				},
 				"type": "TumblingWindowTrigger",
 				"typeProperties": {
 					"frequency": "Hour",
 					"interval": 168,
-					"startTime": "2021-03-11T22:00:00Z",
-					"endTime": "2021-04-25T22:00:00Z",
+					"startTime": "2021-03-14T22:13:00Z",
+					"endTime": "2021-04-25T12:13:00Z",
 					"delay": "00:00:00",
 					"maxConcurrency": 1,
 					"retryPolicy": {

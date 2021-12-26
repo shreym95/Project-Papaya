@@ -8,7 +8,7 @@
 		"Formula1_DataLake_properties_typeProperties_url": {
 			"value": "https://wtf1dl.dfs.core.windows.net"
 		},
-		"Formula1 Trigger_properties_pipeline_parameters_window_end_date_global": {
+		"Formula1 trigger2_properties_pipeline_parameters_window_end_date_global": {
 			"value": "@trigger().outputs.windowEndTime"
 		}
 	}
